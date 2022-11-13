@@ -13,5 +13,8 @@ $app->addErrorMiddleware(true, true, true);
 $app->add(TwigMiddleware::create($app, $twig));
 
 $app->get('/', Controllers\IndexController::class . ':home');
+$app->get('/messages/send', Controllers\MessageController::class . ':send');
 $app->get('/messages/new', Controllers\MessageController::class . ':new');
+$app->post('/messages/send', Controllers\MessageController::class . ':create');
+
 $app->run();

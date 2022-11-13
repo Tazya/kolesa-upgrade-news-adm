@@ -2,9 +2,28 @@
 
 {% block body %}
     <h1>Hello friend!</h1>
-    <form action="/messages"  method="get">
+    {% if errors is not empty %}
+        <div style="color: red">При сохранении произошла ошибка</div>
+        <ul>
+            {% for error in errors %}
+                <li>
+                    {{ error }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form action="/messages/new"  method="get">
+     <div>
+        <label>
+        Заголовок *
+                <input type="text" name="message[title]" value="{{ data.title ?? '' }}">
+                {% if errors.title %}
+                    <div style="color: red">{{ errors.title }}</div>
+                {% endif %}
         <p><b>Send message:</b></p>
-    <p><textarea rows="10" cols="45" name="text" placeholder="Write your message"></textarea></p>
+    <p><textarea rows="10" cols="45" name="message[message]" placeholder="Write your message"></textarea></p>
+        </label>
+    </div>
     <input type="submit" value="Create">
     </form>
 {% endblock %}
