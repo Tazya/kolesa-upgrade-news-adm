@@ -2,7 +2,7 @@
 
 {% block body %}
     <h1>Список сообщений</h1>
-    <form action="/messages/new"  method="get|post">
+    <form action="/messages/send"  method="post">
 
     <ul>
         {% for message in messages %}
