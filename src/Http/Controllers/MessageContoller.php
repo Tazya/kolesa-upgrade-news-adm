@@ -1,14 +1,14 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers;
 
-use Slim\Http\Response;
 use Slim\Http\ServerRequest;
-use Slim\Views\Twig;
+use Slim\Http\Response;
+use SLim\Views\Twig;
 
-class IndexController 
+class MessageController 
 {
-    public function home(ServerRequest $request,Response $response) 
+    public function new(ServerRequest $request,Response $response) 
     {
         $view = Twig::fromRequest($request);
 

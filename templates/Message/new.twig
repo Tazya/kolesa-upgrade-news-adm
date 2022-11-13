@@ -1,0 +1,10 @@
+{% extends "base.twig" %}
+
+{% block body %}
+    <h1>Hello friend!</h1>
+    <form action="/messages"  method="get">
+        <p><b>Send message:</b></p>
+    <p><textarea rows="10" cols="45" name="text" placeholder="Write your message"></textarea></p>
+    <input type="submit" value="Create">
+    </form>
+{% endblock %}
