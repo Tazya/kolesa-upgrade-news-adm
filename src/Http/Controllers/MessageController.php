@@ -32,6 +32,6 @@ class MessageController
             ]);
         }
 
-        return $view->render($response,'Message/index.twig', ['messages'=> $messData]);
+        return $view->render($response,'Message/index.twig', ['messages'=> [$messData]]);
     }
 }
