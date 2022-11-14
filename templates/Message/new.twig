@@ -16,12 +16,12 @@
      <div>
         <label>
         Заголовок *
-                <input type="text" name="message[title]" value="{{ data.title ?? '' }}">
+                <input type="text" name="message[title]" value="{{ data.title ?? '' }}" required >
                 {% if errors.title %}
                     <div style="color: red">{{ errors.title }}</div>
                 {% endif %}
         <p><b>Send message:</b></p>
-    <p><textarea rows="10" cols="45" name="message[message]" placeholder="Write your message"></textarea></p>
+    <p><textarea rows="10" cols="45" name="message[message]" placeholder="Write your message" required></textarea></p>
         </label>
     </div>
     <input type="submit" value="Create">
