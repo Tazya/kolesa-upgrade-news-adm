@@ -1,0 +1,13 @@
+{% extends "base.twig" %}
+
+{% block body %}
+    <h1>Список сообщений</h1>
+    <form action="/messages/send"  method="post">
+
+    <ul>
+        {% for message in messages %}
+            <li>{{ message.title }}</li>
+        {% endfor %}
+    </ul>
+    </form>
+{% endblock %}
