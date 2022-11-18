@@ -6,6 +6,7 @@ use Slim\Http\ServerRequest;
 use Slim\Http\Response;
 use SLim\Views\Twig;
 use App\Model\Validators\MessageValidator;
+use App\Repository\MessageRepository;
 
 class MessageController 
 {
@@ -13,7 +14,7 @@ class MessageController
     {
         $view = Twig::fromRequest($request);
 
-        return $view->render($response, 'Message/new.twig');
+        return $view->render($response, 'Message/index.twig');
     }
 
     public function create(ServerRequest $request, Response $response)
@@ -31,7 +32,18 @@ class MessageController
                 'errors' => $errors,
             ]);
         }
-
+        $repo = new MessageRepository();
+        $repo->create($messageData);
         return $view->render($response,'Message/index.twig', ['messages'=> [$messageData]]);
+    }
+
+    public function allMessages(ServerRequest $request, Response $response)
+    {
+        $repo = new MessageRepository();
+        $messages = $repo->getAll();
+
+        $view = Twig::fromRequest($request);
+
+        return $view->render($response, 'Message/listOfMsg.twig', ["messages" => $messages]);
     }
 }
