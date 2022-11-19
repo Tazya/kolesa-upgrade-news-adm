@@ -2,44 +2,27 @@
 
 namespace App\Http\Controllers;
 
+require_once 'ChatService.php';
+
+use App\ChatService;
+use App\WebClient;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 use Slim\Views\Twig;
-use GuzzleHttp\Client;
 
 class IndexController
 {
-    private $client;
-
-    function initializeClient(): void
-    {
-        $client = new Client([
-            'base_uri' => 'http://localhost',
-            'timeout' => 2.0,
-            'verify' => false,
-        ]);
-        $this->client = $client;
-    }
-
     function home(ServerRequest $request, Response $response)
     {
+        $chatServiceClient = new WebClient();
+        $chat = new ChatService($chatServiceClient);
+        $isAvailable = $chat->checkHealth();
+
         $view = Twig::fromRequest($request);
-        $this->initializeClient();
-
-        try {
-            $serviceResponse = $this->client->request('GET', '/health', ['proxy' => 'localhost:8888']);
-            $result = json_decode($serviceResponse->getBody()->getContents(), associative: true);
-            $status = $result["status"];
-
-            if ($status == "ok") {
-                return $view->render($response, 'home.twig', ['name' => 'guest', 'status' => $status]);
-            } else {
-                $errMessage = "статус сервиса не активен";
-            };
-        } catch (\Exception $error) {
-            $errMessage = $error->getMessage();
+        if ($isAvailable == "ok") {
+            return $view->render($response, 'home.twig', ['name' => 'guest', 'status' => $isAvailable]);
+        } else {
+            return $view->render($response, 'connectError.twig', ['error' => $isAvailable]);
         }
-
-        return $view->render($response, 'connectError.twig', ['error' => $errMessage]);
     }
 }
