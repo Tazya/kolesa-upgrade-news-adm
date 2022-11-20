@@ -4,6 +4,7 @@ namespace App\Repository\DB;
 
 use PDO;
 use PDOException;
+use Yosymfony\Toml\Toml;
 
 class Database
 {
@@ -12,13 +13,16 @@ class Database
     private $DB_NAME;
     private $DB_USER;
     private $DB_PASSWORD;
+    private const CONFIG_PATH = '../config/config.toml';
 
-    public function __construct($cfgData)
+    public function __construct()
     {
-        $this->DB_HOST = $cfgData['db_host'];
-        $this->DB_NAME = $cfgData['db_name'];
-        $this->DB_USER = $cfgData['db_user'];
-        $this->DB_PASSWORD = $cfgData['db_password'];
+        $this->DB_HOST = $this->cfgData['db_host'];
+        $this->DB_NAME = $this->cfgData['db_name'];
+        $this->DB_USER = $this->cfgData['db_user'];
+        $this->DB_PASSWORD = $this->cfgData['db_password'];
+        $this->CONFIG_PATH = Toml::ParseFile(self::CONFIG_PATH);
+        
     }
 
     public function connectDB()

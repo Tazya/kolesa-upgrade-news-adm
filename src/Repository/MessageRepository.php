@@ -4,13 +4,10 @@ namespace App\Repository;
 
 use App\Model\Entity\Message;
 use App\Repository\DB\Database;
-use Yosymfony\Toml\Toml;
 use PDO;
 
 class MessageRepository
 {
-    private const CONFIG_PATH = '../config/config.toml';
-
     public function create(array $msgData): Message
     {
         $this->saveDB($msgData);
@@ -30,9 +27,7 @@ class MessageRepository
     }
 
     private function getDB()
-    {
-        $cfg = Toml::ParseFile(self::CONFIG_PATH);
-        $db = new Database($cfg);
+    {        $db = new Database();
         $connection = $db->connectDB();
 
         $messages = $connection->query('SELECT * FROM messages')->fetchAll(PDO::FETCH_ASSOC);
@@ -41,9 +36,7 @@ class MessageRepository
     }
 
     private function saveDB($data)
-    {
-        $cfg = Toml::ParseFile(self::CONFIG_PATH);
-        $db = new Database($cfg);
+    {        $db = new Database();
         $connection = $db->connectDB();
 
         $statement = $connection->prepare('INSERT INTO messages(title,body,created_at) VALUES (:title, :body, :created_at)');
