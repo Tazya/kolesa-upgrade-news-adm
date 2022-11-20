@@ -6,7 +6,7 @@ use Yosymfony\Toml\Toml;
 
 class Database
 {
-    private const CONFIG_PATH = '../config/config.toml';
+    private const CONFIG_PATH = 'config/local.toml';
     private static ?Database $database = null;
     private \PDO $pdo;
 
@@ -14,6 +14,11 @@ class Database
     {
         if (!isset($config['db_host'], $config['db_name'], $config['db_user'], $config['db_password'])) {
             throw new \Exception('Wrong Database config');
+        }
+
+        if ($config['db_password'] == "") {
+            $password = file("config/DBpassword.txt"); 
+            $config['db_password'] = $password[0];
         }
 
         $dsn = sprintf('mysql:host=%s;dbname=%s', $config['db_host'], $config['db_name']);

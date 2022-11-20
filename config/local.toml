@@ -1,0 +1,7 @@
+db_host='localhost'
+db_name='news'
+db_user='root'
+db_password=''
+base_uri="http://localhost"
+timeout= 2.0
+verify= false
