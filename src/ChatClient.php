@@ -3,15 +3,15 @@
 namespace App;
 
 use GuzzleHttp\Client;
-use Cfg\Config;
+use App\Config;
 
 class ChatClient
 {
-    public $client;
+    static $client;
     
     public function __construct()
     {
         $conf = Config::load();
-        $this->client = new Client($conf);
+        self::$client = new Client($conf);
     }
 }

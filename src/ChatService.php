@@ -13,7 +13,7 @@ class ChatService
 
     function checkHealth(): bool
     {
-        $serviceResponse = $this->chat->client->request('GET', '/health', ['proxy' => 'localhost:8888']);
+        $serviceResponse = $this->chat::$client->request('GET', '/health', ['proxy' => 'localhost:8888']);
         $result = json_decode($serviceResponse->getBody()->getContents(), associative: true);
         if ($result["status"] === "ok") {
             return true;
