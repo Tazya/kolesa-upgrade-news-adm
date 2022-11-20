@@ -1,0 +1,3 @@
+base_uri="http://localhost"
+timeout= 2.0
+verify= false
