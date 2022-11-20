@@ -26,7 +26,6 @@ class Database
             return self::$database;
         }
 
-        print_r('Try To initialize');
         self::$database = new self(Toml::ParseFile(self::CONFIG_PATH));
 
         return self::$database;
