@@ -2,43 +2,38 @@
 
 namespace App\Repository\DB;
 
-use PDO;
-use PDOException;
 use Yosymfony\Toml\Toml;
 
 class Database
 {
-    protected $pdo = null;
-    private $DB_HOST;
-    private $DB_NAME;
-    private $DB_USER;
-    private $DB_PASSWORD;
     private const CONFIG_PATH = '../config/config.toml';
+    private static ?Database $database = null;
+    private \PDO $pdo;
 
-    public function __construct()
+    public function __construct(array $config)
     {
-        $this->DB_HOST = $this->cfgData['db_host'];
-        $this->DB_NAME = $this->cfgData['db_name'];
-        $this->DB_USER = $this->cfgData['db_user'];
-        $this->DB_PASSWORD = $this->cfgData['db_password'];
-        $this->CONFIG_PATH = Toml::ParseFile(self::CONFIG_PATH);
-        
-    }
-
-    public function connectDB()
-    {
-        if (is_null($this->pdo)) {
-            try {
-                $this->pdo = new PDO("mysql:host=" . $this->DB_HOST . ";dbname=" . $this->DB_NAME, $this->DB_USER, $this->DB_PASSWORD);
-            } catch (PDOException $e) {
-                print "ERROR: " . $e->getMessage();
-                die();
-            }
-
-            $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        if (!isset($config['db_host'], $config['db_name'], $config['db_user'], $config['db_password'])) {
+            throw new \Exception('Wrong Database config');
         }
 
-        return $this->pdo;
+        $dsn = sprintf('mysql:host=%s;dbname=%s', $config['db_host'], $config['db_name']);
+        $this->pdo = new \PDO($dsn, $config['db_user'], $config['db_password']);
     }
 
+    public static function getConnection(): Database
+    {
+        if (self::$database) {
+            return self::$database;
+        }
+
+        print_r('Try To initialize');
+        self::$database = new self(Toml::ParseFile(self::CONFIG_PATH));
+
+        return self::$database;
+    }
+
+    public function getPdo(): \PDO
+    {
+        return $this->pdo;
+    }
 }

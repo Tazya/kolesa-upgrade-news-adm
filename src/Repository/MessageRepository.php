@@ -4,46 +4,46 @@ namespace App\Repository;
 
 use App\Model\Entity\Message;
 use App\Repository\DB\Database;
-use PDO;
 
 class MessageRepository
 {
-    public function create(array $msgData): Message
-    {
-        $this->saveDB($msgData);
+    private \PDO $connection;
 
-        return new Message($msgData);
+    public function __construct()
+    {
+        $this->connection = Database::getConnection()->getPdo();
     }
 
-    public function getAll()
+    public function create(array $data): Message
     {
+        $statement = $this->connection->prepare('INSERT INTO messages(title,body) VALUES (:title, :body)');
+        $statement->bindParam('title', $data['title']);
+        $statement->bindParam('body', $data['body']);
+        $statement->execute();
+
+        return new Message($data);
+    }
+
+    /**
+     * @return Message[]
+     */
+    public function getAll(): array
+    {
+        $messages = $this
+            ->connection
+            ->query('SELECT * FROM messages')
+            ->fetchAll(\PDO::FETCH_ASSOC);
+
+        if (!$messages) {
+            return [];
+        }
+
         $result = [];
 
-        foreach ($this->getDB() as $messageData) {
+        foreach ($messages as $messageData) {
             $result[] = new Message($messageData);
         }
 
         return $result;
-    }
-
-    private function getDB()
-    {        $db = new Database();
-        $connection = $db->connectDB();
-
-        $messages = $connection->query('SELECT * FROM messages')->fetchAll(PDO::FETCH_ASSOC);
-
-        return $messages ?? [];
-    }
-
-    private function saveDB($data)
-    {        $db = new Database();
-        $connection = $db->connectDB();
-
-        $statement = $connection->prepare('INSERT INTO messages(title,body,created_at) VALUES (:title, :body, :created_at)');
-        $statement->bindParam('title', $data['title']);
-        $statement->bindParam('body', $data['body']);
-        $now = date_create()->format('Y-m-d H:i:s');
-        $statement->bindParam('created_at', $now);
-        $statement->execute();
     }
 }
