@@ -4,9 +4,9 @@ namespace App\Model\Validators;
 
 class MessageValidator implements ValidatorInterface
 {
-    private const NOT_EMPTY_FIELDS = ['title', 'message'];
+    private const NOT_EMPTY_FIELDS = ['title', 'body'];
     private const MIN_TITLE_LENGTH = 2;
-    private const MAX_TITLE_LENGTH = 100;
+    private const MAX_TITLE_LENGTH = 255;
     private const MIN_MESSAGE_LENGTH = 2;
     private const MAX_MESSAGE_LENGTH = 1000;
 
@@ -60,17 +60,17 @@ class MessageValidator implements ValidatorInterface
 
     private function validateLengthMessage(array $data): array
     {
-        $messLength = mb_strlen($data['title']);
+        $messLength = mb_strlen($data['body']);
 
         if ($messLength < self::MIN_MESSAGE_LENGTH) {
             return [
-                'title' => 'Заголовок не может быть меньше ' . self::MIN_MESSAGE_LENGTH . ' символов'
+                'body' => 'Тело не может быть меньше ' . self::MIN_MESSAGE_LENGTH . ' символов'
             ];
         }
 
         if ($messLength > self::MAX_MESSAGE_LENGTH) {
             return [
-                'title' => 'Заголовок не может быть больше ' . self::MAX_MESSAGE_LENGTH . ' символов'
+                'body' => 'Тело не может быть больше ' . self::MAX_MESSAGE_LENGTH . ' символов'
             ];
         }
 
