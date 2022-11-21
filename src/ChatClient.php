@@ -8,10 +8,11 @@ use App\Config;
 class ChatClient
 {
     static $client;
-    
+    static $config;
+
     public function __construct()
     {
-        $conf = Config::load();
-        self::$client = new Client($conf);
+        self::$config = Config::load();
+        self::$client = new Client(self::$config);
     }
 }

@@ -7,7 +7,8 @@ use Slim\Http\Response;
 use SLim\Views\Twig;
 use App\Model\Validators\MessageValidator;
 use App\Repository\MessageRepository;
-use GuzzleHttp\Client;
+use App\ChatService;
+use App\ChatClient;
 
 class MessageController
 {
@@ -34,21 +35,12 @@ class MessageController
             ]);
         }
 
-        $data = [
-            'proxy' => 'localhost:8888',
-            'body' => json_encode($messageData),
-        ];
-        $client = new Client();
+        $chatServiceClient = new ChatClient();
+        $chat = new ChatService($chatServiceClient);
         try {
-            $serviceResponse = $client->request('POST', 'http://localhost/messages/sendToAll', $data);
-            $result = json_decode($serviceResponse->getBody()->getContents(), associative: true);
-            
-            if ($result["status"] != "ok"){
-                throw new \Exception($result["error"]);
-            }
-
-        } catch (\Exception $exc) {
-            return $view->render($response, 'sendError.twig', ['error' => $exc->getMessage()]);
+            $chat->sendMessage($messageData);
+        } catch (\Exception $exception) {
+            return $view->render($response, 'sendError.twig', ['error' => $exception->getMessage()]);
         };
 
         $repo = new MessageRepository();
