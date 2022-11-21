@@ -17,7 +17,7 @@ class ChatService
 
     function checkHealth(): bool
     {
-        $serviceResponse = $this->chat::$client->request('GET', self::$config["is_avaible_url"], ['proxy' => self::$config["proxy"]]);
+        $serviceResponse = $this->chat::$client->request('GET', "/health", ['proxy' => self::$config["ChatService"]["proxy"]]);
         $result = json_decode($serviceResponse->getBody()->getContents(), associative: true);
         if ($result["status"] === "ok") {
             return true;
@@ -29,11 +29,11 @@ class ChatService
     function sendMessage(array $messageData)
     {
         $data = [
-            'proxy' => self::$config["proxy"],
+            'proxy' => self::$config["ChatService"]["proxy"],
             'body' => json_encode($messageData),
         ];
         
-        $serviceResponse = $this->chat::$client->request('POST', self::$config["send_message_url"], $data);
+        $serviceResponse = $this->chat::$client->request('POST', "/messages/sendToAll", $data);
         $result = json_decode($serviceResponse->getBody()->getContents(), associative: true);
         if ($result["status"] != "ok") {
             throw new \Exception($result["error"]);

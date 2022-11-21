@@ -12,17 +12,17 @@ class Database
 
     public function __construct(array $config)
     {
-        if (!isset($config['db_host'], $config['db_name'], $config['db_user'], $config['db_password'])) {
+        if (!isset($config['DB']['host'], $config['DB']['name'], $config['DB']['user'], $config['DB']['password'])) {
             throw new \Exception('Wrong Database config');
         }
 
-        if ($config['db_password'] == "") {
+        if ($config['DB']['password'] == "") {
             $password = file("config/DBpassword.txt"); 
-            $config['db_password'] = $password[0];
+            $config['DB']['password'] = $password[0];
         }
 
-        $dsn = sprintf('mysql:host=%s;dbname=%s', $config['db_host'], $config['db_name']);
-        $this->pdo = new \PDO($dsn, $config['db_user'], $config['db_password']);
+        $dsn = sprintf('mysql:host=%s;dbname=%s', $config['DB']['host'], $config['DB']['name']);
+        $this->pdo = new \PDO($dsn, $config['DB']['user'], $config['DB']['password']);
     }
 
     public static function getConnection(): Database

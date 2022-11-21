@@ -1,13 +1,13 @@
-# DB
-db_host='localhost'
-db_name='news'
-db_user='root'
-db_password=''
-# Base client
+[DB]
+host='localhost'
+name='news'
+user='root'
+password=''
+
+[ChatClient]
 base_uri="http://localhost"
 timeout= 2.0
 verify= false
-# URLs
+
+[ChatService]
 proxy = "localhost:8888"
-is_avaible_url = "/health"
-send_message_url = "/messages/sendToAll"
