@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
@@ -7,10 +7,12 @@ use Slim\Http\Response;
 use SLim\Views\Twig;
 use App\Model\Validators\MessageValidator;
 use App\Repository\MessageRepository;
+use App\ChatService;
+use App\ChatClient;
 
-class MessageController 
+class MessageController
 {
-    public function new(ServerRequest $request,Response $response) 
+    public function new(ServerRequest $request, Response $response)
     {
         $view = Twig::fromRequest($request);
 
@@ -32,9 +34,18 @@ class MessageController
                 'errors' => $errors,
             ]);
         }
+
+        $chatServiceClient = new ChatClient();
+        $chat = new ChatService($chatServiceClient);
+        try {
+            $chat->sendMessage($messageData);
+        } catch (\Exception $exception) {
+            return $view->render($response, 'sendError.twig', ['error' => $exception->getMessage()]);
+        };
+
         $repo = new MessageRepository();
         $repo->create($messageData);
-        return $view->render($response,'Message/index.twig', ['messages'=> [$messageData]]);
+        return $view->render($response, 'Message/index.twig', ['messages' => [$messageData]]);
     }
 
     public function allMessages(ServerRequest $request, Response $response)

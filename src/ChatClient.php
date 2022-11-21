@@ -8,10 +8,14 @@ use App\Config;
 class ChatClient
 {
     static $client;
-    
+
     public function __construct()
     {
-        $conf = Config::load();
-        self::$client = new Client($conf);
+        $config = Config::load();
+        self::$client = new Client([
+            'base_uri' => $config["ChatClient"]["base_uri"],
+            'timeout' =>  $config["ChatClient"]["timeout"],
+            'verify' =>  $config["ChatClient"]["verify"],
+        ]);
     }
 }
