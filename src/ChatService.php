@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Config;
+
 class ChatService
 {
     static $config;
@@ -10,7 +12,7 @@ class ChatService
     public function __construct(ChatClient $chat)
     {
         $this->chat = $chat;
-        self::$config = $chat::$config;
+        self::$config = Config::load();
     }
 
     function checkHealth(): bool
