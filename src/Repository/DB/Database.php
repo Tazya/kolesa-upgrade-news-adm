@@ -6,7 +6,7 @@ use Yosymfony\Toml\Toml;
 
 class Database
 {
-    private const CONFIG_PATH = 'config/local.toml';
+    private const CONFIG_PATH = __DIR__ . '/../../../config/local.toml';
     private static ?Database $database = null;
     private \PDO $pdo;
 
