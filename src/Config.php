@@ -5,7 +5,7 @@ namespace App;
 use Yosymfony\Toml\Toml;
 
 class Config {
-    private const CONFIG_PATH = 'config/local.toml';
+    private const CONFIG_PATH = __DIR__ . '/../config/local.toml';
     private static $config = NULL;
 
     public static function load() {
