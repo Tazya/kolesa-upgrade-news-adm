@@ -7,6 +7,7 @@ use Yosymfony\Toml\Toml;
 class Database
 {
     private const CONFIG_PATH = __DIR__ . '/../../../config/local.toml';
+    private const PATHWORD_PATH = __DIR__ . '/../../../config/DbPassword.txt';
     private static ?Database $database = null;
     private \PDO $pdo;
 
@@ -17,7 +18,7 @@ class Database
         }
 
         if ($config['DB']['password'] == "") {
-            $password = file("config/DBpassword.txt"); 
+            $password = file(self::PATHWORD_PATH); 
             $config['DB']['password'] = $password[0];
         }
 
