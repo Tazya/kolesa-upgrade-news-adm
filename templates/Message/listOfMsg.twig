@@ -1,11 +1,17 @@
 {% extends "base.twig" %}
 
 {% block body %}
-    <ul>
-        {% for message in messages %}
-            <li> <b> {{ message.getTitle() }} </b>
-                <p> {{message.getBody() }} </p>
-            </li>
-        {% endfor %}
-    </ul>
+<form method="get" action="/messages" >
+<table>
+  <tr>
+    <td>{% for message in messages %}
+  <tr>
+    <th>Title: {{ message.getTitle() }}</th>
+    <td>Body: {{message.getBody() }}</td>
+  </tr>
+      {% endfor %}
+    </td>
+  </tr>
+</table>
 {% endblock %}
+
